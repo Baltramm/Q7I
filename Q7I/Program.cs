@@ -6,7 +6,12 @@ namespace Q7I
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var Order = new Order<HomeDelivery, MasterCard>();
+  
+            Order.Product.FillProduct();
+            Order.Delivery.SetAdress();
+            Order.Payment.PayInfo();
+            Order.Payment.Pay();
         }
     }
 
@@ -57,7 +62,7 @@ namespace Q7I
         }
     }
 
-    class Order<TDelivery, TStruct, TPayment> where TDelivery : Delivery where TPayment : Payment
+    class Order<TDelivery, TPayment> where TDelivery : Delivery where TPayment : Payment
     {
         public TDelivery Delivery;
 
@@ -67,6 +72,10 @@ namespace Q7I
 
         public string Description;
 
+        public void DisplayStatus()
+        {
+            Console.WriteLine();
+        }
         public void DisplayAddress()
         {
             Console.WriteLine(Delivery.Address);
@@ -95,11 +104,15 @@ namespace Q7I
         public string Description;
         public string Price;
 
-
+        
     }
     class Products:Product
     {
         public int Count;
+        public void FillProduct()
+        {
+
+        }
     }
 
 
@@ -137,12 +150,17 @@ namespace Q7I
         public Status Status;
 
        public abstract void PayInfo();
+        public virtual void Pay()
+        {
+            Console.WriteLine("Подтвердите платеж(Да или Нет)");
+
+        }
         
     }
     abstract class CardPayment:Payment
     {
         public string Number1;
-        private string _number2;
+        protected string _number2;
         public string Number2 { get { return "***"; } set { _number2 = value; } }
         public override void PayInfo()
         {
